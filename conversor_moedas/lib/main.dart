@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
                   textAlign: TextAlign.center,
                 ));
               default:
-                if (snapshot.error) {
+                if (snapshot.hasError) {
                   return Center(
                       child: Text(
                     "Erro ao Carregar os Dados",
@@ -88,8 +88,8 @@ class _HomeState extends State<Home> {
                     textAlign: TextAlign.center,
                   ));
                 } else {
-                  dolar = snapshot.data["results"]["currences"]["USD"]["buy"];
-                  euro = snapshot.data["results"]["currences"]["EUR"]["buy"];
+                  dolar = snapshot.data["results"]["currencies"]["USD"]["buy"];
+                  euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
                   return SingleChildScrollView(
                     padding: EdgeInsets.all(10.0),
                     child: Column(
