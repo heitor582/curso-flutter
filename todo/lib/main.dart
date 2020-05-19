@@ -61,7 +61,8 @@ class _HomeState extends State<Home> {
                       color: Colors.blueAccent,
                       child: Text("ADD"),
                       textColor: Colors.white,
-                      onPressed: () {})
+                      onPressed: () {},
+                    )
                 ],
               )),
         ]));
