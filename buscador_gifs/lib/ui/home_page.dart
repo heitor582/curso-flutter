@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
       ),
       itemCount: _getCount(snapshot.data["data"]),
       itemBuilder: (context, index) {
-        return (_search == null || index < snapshot.data["data"])
+        return (_search == null || index < snapshot.data["data"].length)
             ? GestureDetector(
                 child: Image.network(
                   snapshot.data["data"][index]["images"]["fixed_height"]["url"],
