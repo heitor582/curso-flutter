@@ -17,14 +17,14 @@ class _HomePageState extends State<HomePage> {
         ? response = await http.get(
             "https://api.giphy.com/v1/gifs/trending?api_key=4m7wOUvOlXptUS0QI2UUo993PpALFebN&limit=20&rating=G")
         : response = await http.get(
-            "https://api.giphy.com/v1/gifs/search?api_key=4m7wOUvOlXptUS0QI2UUo993PpALFebN&q=$_search&limit=20&offset=$_off&rating=G&lang=en");
+            "https://api.giphy.com/v1/gifs/search?api_key=4m7wOUvOlXptUS0QI2UUo993PpALFebN&q=$_search&limit=19&offset=$_off&rating=G&lang=en");
     return json.decode(response.body);
   }
 
   @override
   void initState() {
     super.initState();
-    _getSearch().then((map) {});
+    _getSearch();
   }
 
   @override
@@ -49,9 +49,10 @@ class _HomePageState extends State<HomePage> {
               ),
               style: TextStyle(color: Colors.white, fontSize: 18.0),
               textAlign: TextAlign.center,
-              onSubmitted: (text){
+              onSubmitted: (text) {
                 setState(() {
                   _search = text;
+                  _off = 0;
                 });
               },
             ),
@@ -87,23 +88,57 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  int _getCount(List data) {
+    return (_search == null) ? data.length : data.length + 1;
+  }
+
   Widget _createGifsTable(BuildContext context, AsyncSnapshot snapshot) {
     return GridView.builder(
-        padding: EdgeInsets.all(10.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
-        ),
-        itemCount: snapshot.data["data"].length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Image.network(
-              snapshot.data["data"][index]["images"]["fixed_height"]["url"],
-              height: 300.0,
-              fit: BoxFit.cover,
-            ),
-          );
-        });
+      padding: EdgeInsets.all(10.0),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+      ),
+      itemCount: _getCount(snapshot.data["data"]),
+      itemBuilder: (context, index) {
+        return (_search == null || index < snapshot.data["data"])
+            ? GestureDetector(
+                child: Image.network(
+                  snapshot.data["data"][index]["images"]["fixed_height"]["url"],
+                  height: 300.0,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Container(
+                child: GestureDetector(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 70.0,
+                      ),
+                      Text(
+                        "Show more",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    setState(
+                      () {
+                        _off += 19;
+                      },
+                    );
+                  },
+                ),
+              );
+      },
+    );
   }
 }
