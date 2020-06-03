@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:buscador_gifs/ui/gif_page.dart';
 import 'package:share/share.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:http/http.dart' as http;
 import "dart:convert";
 import 'dart:async';
@@ -106,8 +107,9 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (context, index) {
         return (_search == null || index < snapshot.data["data"].length)
             ? GestureDetector(
-                child: Image.network(
-                  snapshot.data["data"][index]["images"]["fixed_height"]["url"],
+                child: FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: snapshot.data["data"][index]["images"]["fixed_height"]["url"],
                   height: 300.0,
                   fit: BoxFit.cover,
                 ),
@@ -118,8 +120,9 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) =>
                               GifPage(snapshot.data["data"][index])));
                 },
-                onLongPress: (){
-                  Share.share(snapshot.data["data"][index]["images"]["fixed_height"]["url"]);
+                onLongPress: () {
+                  Share.share(snapshot.data["data"][index]["images"]
+                      ["fixed_height"]["url"]);
                 },
               )
             : Container(
