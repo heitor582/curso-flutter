@@ -1,7 +1,10 @@
 import 'package:agenda_contatos/ui/contact_page.dart';
 import 'package:flutter/material.dart';
 import 'package:agenda_contatos/helpers/contact_helper.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
+
+enum OrderOptions { orderaz, orderza }
 
 class HomePage extends StatefulWidget {
   @override
@@ -25,6 +28,17 @@ class _HomePageState extends State<HomePage> {
         title: Text("Contatos"),
         backgroundColor: Colors.redAccent,
         centerTitle: true,
+        actions: <Widget>[
+          PopupMenuButton<OrderOptions>(
+            itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+              const PopupMenuItem<OrderOptions>(
+                  child: Text("Ordernar de A-Z"), value: OrderOptions.orderaz),
+              const PopupMenuItem<OrderOptions>(
+                  child: Text("Ordernar de Z-A"), value: OrderOptions.orderza),
+            ],
+            onSelected: _orderList,
+          )
+        ],
       ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
@@ -47,7 +61,7 @@ class _HomePageState extends State<HomePage> {
   Widget _contactCard(BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
-        _showContactPage(contact: contacts[index]);
+        _showOptions(context, index);
       },
       child: Card(
         child: Padding(
@@ -90,6 +104,83 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _showOptions(BuildContext context, int index) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return BottomSheet(
+            onClosing: null,
+            builder: (context) {
+              return Container(
+                padding: EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: FlatButton(
+                        onPressed: () {
+                          launch("tel:{$contacts[index].phone}");
+                          Navigator.pop(context);
+                        },
+                        child: Text('Ligar',
+                            style: TextStyle(
+                                color: Colors.redAccent, fontSize: 20.0)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _showContactPage(contact: contacts[index]);
+                        },
+                        child: Text('Editar',
+                            style: TextStyle(
+                                color: Colors.redAccent, fontSize: 20.0)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: FlatButton(
+                        onPressed: () {
+                          helper.deleteContact(contacts[index].id);
+                          setState(() {
+                            contacts.removeAt(index);
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: Text('Remover',
+                            style: TextStyle(
+                                color: Colors.redAccent, fontSize: 20.0)),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  void _orderList(OrderOptions result) {
+    switch (result) {
+      case OrderOptions.orderaz:
+        contacts.sort((a,b){
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+        break;
+      case OrderOptions.orderza:
+        contacts.sort((a,b){
+          return b.name.toLowerCase().compareTo(a.name.toLowerCase());
+        });
+        break;
+    }
+    setState(() {
+      
+    });
   }
 
   void _showContactPage({Contact contact}) async {
