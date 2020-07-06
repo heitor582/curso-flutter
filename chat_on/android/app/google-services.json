@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "926518015629",
+    "firebase_url": "https://chatonflutter-3e8ff.firebaseio.com",
+    "project_id": "chatonflutter-3e8ff",
+    "storage_bucket": "chatonflutter-3e8ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926518015629:android:4baf965c77e6a156a154c4",
+        "android_client_info": {
+          "package_name": "com.example.chat_on"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926518015629-tdh3fatpkklns9emu0o1p109pslka132.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_on",
+            "certificate_hash": "619ecd321f9ec5a93108b44853ed943a6a576fd8"
+          }
+        },
+        {
+          "client_id": "926518015629-anljpqlj6v742u3lrakvivgsnn1p6git.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABXjOBZnJc7czPg0s1wJopd82yw_OhjeI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926518015629-anljpqlj6v742u3lrakvivgsnn1p6git.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
